@@ -730,36 +730,7 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
     dReal dev_x = cfg->noiseDeviation_x();
     dReal dev_y = cfg->noiseDeviation_y();
     dReal dev_a = cfg->noiseDeviation_angle();
-    if (sendGeomCount++ % cfg->sendGeometryEvery() == 0)
-    {
-        SSL_GeometryData* geom = packet->mutable_geometry();
-        SSL_GeometryFieldSize* field = geom->mutable_field();
-
-
-        // Old protocol
-//        field->set_line_width(CONVUNIT(cfg->Field_Line_Width()));
-//        field->set_referee_width(CONVUNIT(cfg->Field_Referee_Margin()));
-//        field->set_goal_wall_width(CONVUNIT(cfg->Goal_Thickness()));
-//        field->set_center_circle_radius(CONVUNIT(cfg->Field_Rad()));
-//        field->set_defense_radius(CONVUNIT(cfg->Field_Defense_Rad()));
-//        field->set_defense_stretch(CONVUNIT(cfg->Field_Defense_Stretch()));
-//        field->set_free_kick_from_defense_dist(CONVUNIT(cfg->Field_Free_Kick()));
-        //TODO: verify if these fields are correct:
-//        field->set_penalty_line_from_spot_dist(CONVUNIT(cfg->Field_Penalty_Line()));
-//        field->set_penalty_spot_from_field_line_dist(CONVUNIT(cfg->Field_Penalty_Point()));
-
-        // Current protocol (2015+)
-        // Field general info
-        field->set_field_length(CONVUNIT(cfg->Field_Length()));
-        field->set_field_width(CONVUNIT(cfg->Field_Width()));
-        field->set_boundary_width(CONVUNIT(cfg->Field_Margin()));
-        field->set_goal_width(CONVUNIT(cfg->Goal_Width()));
-        field->set_goal_depth(CONVUNIT(cfg->Goal_Depth()));
-
-        // Field lines and arcs
-        addFieldLinesArcs(field);
-
-    }
+    
     if (cfg->noise()==false) {dev_x = 0;dev_y = 0;dev_a = 0;}
     if ((cfg->vanishing()==false) || (rand0_1() > cfg->ball_vanishing()))
     {
