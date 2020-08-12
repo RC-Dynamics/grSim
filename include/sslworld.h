@@ -103,6 +103,9 @@ public:
     bool fullSpeed = false;
     int steps;
     QElapsedTimer *timer_measure;
+    const dReal* ball_vel;
+    const dReal* robot_vel;
+    const dReal* robot_angular_vel;
 
 public slots:
     void recvActions();
