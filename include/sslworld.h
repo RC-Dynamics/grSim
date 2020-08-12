@@ -100,6 +100,8 @@ public:
     Robot* robots[MAX_ROBOT_COUNT*2];
     QTime *timer;
     int sendGeomCount;
+    bool fullSpeed = false;
+
 public slots:
     void recvActions();
 signals:

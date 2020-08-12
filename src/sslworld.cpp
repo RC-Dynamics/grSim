@@ -424,7 +424,7 @@ void SSLWorld::step(dReal dt)
         else last_dt = dt;
 
         selected = -1;
-        p->step(dt/ballCollisionTry);
+        p->step(dt/ballCollisionTry, fullspeed);
     }
 
 
