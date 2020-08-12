@@ -434,13 +434,14 @@ void SSLWorld::step(dReal dt)
         selected = -1;
         p->step(dt/ballCollisionTry, fullSpeed);
     }
+    /*For debug
     steps++;
     int tiago = timer_measure->elapsed();
     if(tiago>1000){
         printf("%d     %d     %f     %f\n", tiago,steps, dt, dt*steps*1000/(float)tiago);  
         timer_measure->restart();
         steps = 0;
-    }
+    }*/
 
 
     int best_k=-1;
