@@ -131,9 +131,7 @@ ConfigWidget::ConfigWidget()
         ADD_VALUE(vanishing_vars,Double,blue_team_vanishing,0,"Blue team")
         ADD_VALUE(vanishing_vars,Double,yellow_team_vanishing,0,"Yellow team")
         ADD_VALUE(vanishing_vars,Double,ball_vanishing,0,"Ball")
-    world=VarXML::read(world,(QDir::homePath() + QString("/.grsim.xml")).toStdString());
-
-
+    
     std::string blueteam = v_BlueTeam->getString();
     geo_vars->removeChild(v_BlueTeam);
 
