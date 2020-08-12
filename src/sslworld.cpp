@@ -618,6 +618,7 @@ void SSLWorld::recvActions()
             }
             if (packet.has_replacement())
             {
+                framenum = 0;
                 for (int i=0;i<packet.replacement().robots_size();i++)
                 {
                     int team = 0;
