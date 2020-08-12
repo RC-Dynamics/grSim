@@ -101,6 +101,8 @@ public:
     QTime *timer;
     int sendGeomCount;
     bool fullSpeed = false;
+    int steps;
+    QElapsedTimer *timer_measure;
 
 public slots:
     void recvActions();

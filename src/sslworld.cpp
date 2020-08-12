@@ -18,6 +18,7 @@ Copyright (C) 2011, Parsian Robotic Center (eew.aut.ac.ir/~parsian/grsim)
 
 #include "sslworld.h"
 
+
 #include <QtGlobal>
 #include <QtNetwork>
 
@@ -32,6 +33,9 @@ Copyright (C) 2011, Parsian Robotic Center (eew.aut.ac.ir/~parsian/grsim)
 #include "messages_robocup_ssl_geometry.pb.h"
 #include "messages_robocup_ssl_refbox_log.pb.h"
 #include "messages_robocup_ssl_wrapper.pb.h"
+
+//using namespace std;
+
 
 
 #define ROBOT_GRAY 0.4
@@ -302,6 +306,10 @@ SSLWorld::SSLWorld(QGLWidget* parent,ConfigWidget* _cfg,RobotsFomation *form1,Ro
     timer->start();
     in_buffer = new char [65536];
 
+    steps = 0;
+    timer_measure = new QElapsedTimer();
+    timer_measure->start();
+
     // initialize robot state
     for (int team = 0; team < 2; ++team)
     {
@@ -424,7 +432,14 @@ void SSLWorld::step(dReal dt)
         else last_dt = dt;
 
         selected = -1;
-        p->step(dt/ballCollisionTry, fullspeed);
+        p->step(dt/ballCollisionTry, fullSpeed);
+    }
+    steps++;
+    int tiago = timer_measure->elapsed();
+    if(tiago>1000){
+        printf("%d     %d     %f     %f\n", tiago,steps, dt, dt*steps*1000/(float)tiago);  
+        timer_measure->restart();
+        steps = 0;
     }
 
 

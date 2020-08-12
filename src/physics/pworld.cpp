@@ -164,7 +164,7 @@ PSurface* PWorld::findSurface(PObject* o1,PObject* o2)
     return NULL;
 }
 
-void PWorld::step(dReal dt)
+void PWorld::step(dReal dt, bool sync)
 {
     try {
         dSpaceCollide (space,this,&nearCallback);
