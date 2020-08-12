@@ -693,28 +693,6 @@ dReal normalizeAngle(dReal a)
     return a;
 }
 
-bool SSLWorld::visibleInCam(int id, double x, double y)
-{
-    id %= 4;
-    if (id==0)
-    {
-        if (x>-0.2 && y>-0.2) return true;
-    }
-    if (id==1)
-    {
-        if (x>-0.2 && y<0.2) return true;
-    }
-    if (id==2)
-    {
-        if (x<0.2 && y<0.2) return true;
-    }
-    if (id==3)
-    {
-        if (x<0.2 && y>-0.2) return true;
-    }
-    return false;
-}
-
 #define CONVUNIT(x) ((int)(1000*(x)))
 SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
 {
@@ -734,19 +712,17 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
     if (cfg->noise()==false) {dev_x = 0;dev_y = 0;dev_a = 0;}
     if ((cfg->vanishing()==false) || (rand0_1() > cfg->ball_vanishing()))
     {
-        if (visibleInCam(cam_id, x, y)) {
-            SSL_DetectionBall* vball = packet->mutable_detection()->add_balls();
-            ball_vel = dBodyGetLinearVel(ball->body);
-            vball->set_x(randn_notrig(x*1000.0f,dev_x));
-            vball->set_y(randn_notrig(y*1000.0f,dev_y));
-            vball->set_z(z*1000.0f);
-            vball->set_pixel_x(x*1000.0f);
-            vball->set_pixel_y(y*1000.0f);
-            vball->set_confidence(0.9 + rand0_1()*0.1);
-            vball->set_vx(ball_vel[0]*1000.0f);
-            vball->set_vy(ball_vel[1]*1000.0f);
-            vball->set_vz(ball_vel[2]*1000.0f);
-        }
+        SSL_DetectionBall* vball = packet->mutable_detection()->add_balls();
+        ball_vel = dBodyGetLinearVel(ball->body);
+        vball->set_x(randn_notrig(x*1000.0f,dev_x));
+        vball->set_y(randn_notrig(y*1000.0f,dev_y));
+        vball->set_z(z*1000.0f);
+        vball->set_pixel_x(x*1000.0f);
+        vball->set_pixel_y(y*1000.0f);
+        vball->set_confidence(0.9 + rand0_1()*0.1);
+        vball->set_vx(ball_vel[0]*1000.0f);
+        vball->set_vy(ball_vel[1]*1000.0f);
+        vball->set_vz(ball_vel[2]*1000.0f);
     }
     for(int i = 0; i < cfg->Robots_Count(); i++){
         if ((cfg->vanishing()==false) || (rand0_1() > cfg->blue_team_vanishing()))
@@ -760,21 +736,19 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
                     robots[i]->resetRobot();
                 }
             }
-            if (visibleInCam(cam_id, x, y)) {
-                SSL_DetectionRobot* rob = packet->mutable_detection()->add_robots_blue();
-                robot_vel = dBodyGetLinearVel(robots[i]->chassis->body);
-                robot_angular_vel = dBodyGetAngularVel(robots[i]->chassis->body);
-                rob->set_robot_id(i);
-                rob->set_pixel_x(x*1000.0f);
-                rob->set_pixel_y(y*1000.0f);
-                rob->set_confidence(1);
-                rob->set_x(randn_notrig(x*1000.0f,dev_x));
-                rob->set_y(randn_notrig(y*1000.0f,dev_y));
-                rob->set_orientation(normalizeAngle(randn_notrig(dir,dev_a))*M_PI/180.0f);
-                rob->set_vx(robot_vel[0]*1000.0f);
-                rob->set_vy(robot_vel[1]*1000.0f);
-                rob->set_vorientation(robot_angular_vel[2]);
-            }
+            SSL_DetectionRobot* rob = packet->mutable_detection()->add_robots_blue();
+            robot_vel = dBodyGetLinearVel(robots[i]->chassis->body);
+            robot_angular_vel = dBodyGetAngularVel(robots[i]->chassis->body);
+            rob->set_robot_id(i);
+            rob->set_pixel_x(x*1000.0f);
+            rob->set_pixel_y(y*1000.0f);
+            rob->set_confidence(1);
+            rob->set_x(randn_notrig(x*1000.0f,dev_x));
+            rob->set_y(randn_notrig(y*1000.0f,dev_y));
+            rob->set_orientation(normalizeAngle(randn_notrig(dir,dev_a))*M_PI/180.0f);
+            rob->set_vx(robot_vel[0]*1000.0f);
+            rob->set_vy(robot_vel[1]*1000.0f);
+            rob->set_vorientation(robot_angular_vel[2]);
         }
     }
     for(int i = cfg->Robots_Count(); i < cfg->Robots_Count()*2; i++){
@@ -789,21 +763,19 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
                     robots[i]->resetRobot();
                 }
             }
-            if (visibleInCam(cam_id, x, y)) {
-                SSL_DetectionRobot* rob = packet->mutable_detection()->add_robots_yellow();
-                robot_vel = dBodyGetLinearVel(robots[i]->chassis->body);
-                robot_angular_vel = dBodyGetAngularVel(robots[i]->chassis->body);
-                rob->set_robot_id(i-cfg->Robots_Count());
-                rob->set_pixel_x(x*1000.0f);
-                rob->set_pixel_y(y*1000.0f);
-                rob->set_confidence(1);
-                rob->set_x(randn_notrig(x*1000.0f,dev_x));
-                rob->set_y(randn_notrig(y*1000.0f,dev_y));
-                rob->set_orientation(normalizeAngle(randn_notrig(dir,dev_a))*M_PI/180.0f);
-                rob->set_vx(robot_vel[0]*1000.0f);
-                rob->set_vy(robot_vel[1]*1000.0f);
-                rob->set_vorientation(robot_angular_vel[2]);
-            }
+            SSL_DetectionRobot* rob = packet->mutable_detection()->add_robots_yellow();
+            robot_vel = dBodyGetLinearVel(robots[i]->chassis->body);
+            robot_angular_vel = dBodyGetAngularVel(robots[i]->chassis->body);
+            rob->set_robot_id(i-cfg->Robots_Count());
+            rob->set_pixel_x(x*1000.0f);
+            rob->set_pixel_y(y*1000.0f);
+            rob->set_confidence(1);
+            rob->set_x(randn_notrig(x*1000.0f,dev_x));
+            rob->set_y(randn_notrig(y*1000.0f,dev_y));
+            rob->set_orientation(normalizeAngle(randn_notrig(dir,dev_a))*M_PI/180.0f);
+            rob->set_vx(robot_vel[0]*1000.0f);
+            rob->set_vy(robot_vel[1]*1000.0f);
+            rob->set_vorientation(robot_angular_vel[2]);
         }
     }
     return packet;
@@ -892,17 +864,14 @@ void SSLWorld::sendVisionBuffer()
 {
     int t = timer->elapsed();
     sendQueue.push_back(new SendingPacket(generatePacket(0),t));    
-    sendQueue.push_back(new SendingPacket(generatePacket(1),t+1));
-    sendQueue.push_back(new SendingPacket(generatePacket(2),t+2));
-    sendQueue.push_back(new SendingPacket(generatePacket(3),t+3));
-    while (t - sendQueue.front()->t>=cfg->sendDelay())
+
+    if (t - sendQueue.front()->t>=cfg->sendDelay())
     {
         SSL_WrapperPacket *packet = sendQueue.front()->packet;
         delete sendQueue.front();
         sendQueue.pop_front();
         visionServer->send(*packet);
         delete packet;
-        if (sendQueue.isEmpty()) break;
     }
 }
 

@@ -77,7 +77,6 @@ public:
     void addFieldLine(SSL_GeometryFieldSize *field, const std::string &name, float p1_x, float p1_y, float p2_x, float p2_y, float thickness);
     void addFieldArc(SSL_GeometryFieldSize *field, const string &name, float c_x, float c_y, float radius, float a1, float a2, float thickness);
     void sendVisionBuffer();
-    bool visibleInCam(int id, double x, double y);
     int  robotIndex(int robot,int team);
     void addRobotStatus(Robots_Status& robotsPacket, int robotID, int team, bool infrared, KickStatus kickStatus);
     void sendRobotStatus(Robots_Status& robotsPacket, QHostAddress sender, int team);
