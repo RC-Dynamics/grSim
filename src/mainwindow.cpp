@@ -553,3 +553,9 @@ void MainWindow::setIsGlEnabled(bool value)
 {
   glwidget->ssl->isGLEnabled = value;
 }
+
+void MainWindow::fullSpeed(bool value)
+{
+    glwidget->ssl->fullSpeed = value;
+}
+

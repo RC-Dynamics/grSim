@@ -162,7 +162,4 @@ void MainWindow::sendPacket()
     udpsocket.writeDatagram(dgram, _addr, _port);
 }
 
-void MainWindow::fullSpeed(bool value)
-{
-    glwidget->ssl->fullSpeed = value;
-}
+
