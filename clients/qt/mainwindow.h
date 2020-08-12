@@ -29,6 +29,8 @@ public slots:
     void sendBtnClicked();
     void resetBtnClicked();
     void disconnectUdp();
+    void fullSpeed(bool value);
+
 private:
     bool sending, reseting;
     QUdpSocket udpsocket;

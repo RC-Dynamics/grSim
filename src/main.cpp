@@ -40,5 +40,7 @@ int main(int argc, char *argv[])
         // Run normally
         w.show();
     }
+    if(std::find(argv, argend, std::string("--xlr8")) != argend)
+        w.fullSpeed(true);
     return a.exec();
 }

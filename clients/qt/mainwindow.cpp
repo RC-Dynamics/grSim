@@ -161,3 +161,8 @@ void MainWindow::sendPacket()
     packet.SerializeToArray(dgram.data(), dgram.size());
     udpsocket.writeDatagram(dgram, _addr, _port);
 }
+
+void MainWindow::fullSpeed(bool value)
+{
+    glwidget->ssl->fullSpeed = value;
+}
