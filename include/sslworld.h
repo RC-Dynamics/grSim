@@ -105,6 +105,7 @@ public:
     const dReal* ball_vel;
     const dReal* robot_vel;
     const dReal* robot_angular_vel;
+    bool received = true;
 
 public slots:
     void recvActions();

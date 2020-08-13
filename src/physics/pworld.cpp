@@ -164,12 +164,12 @@ PSurface* PWorld::findSurface(PObject* o1,PObject* o2)
     return NULL;
 }
 
-void PWorld::step(dReal dt, bool sync)
+void PWorld::step(dReal dt, bool fullspeed)
 {
     try {
         dSpaceCollide (space,this,&nearCallback);
         dWorldSetQuickStepNumIterations(world, 20);
-        if (sync)
+        if (fullspeed)
             dWorldQuickStep(world, (dt < 0) ? delta_time : dt);
         else
             dWorldStep(world, (dt < 0) ? delta_time : dt);

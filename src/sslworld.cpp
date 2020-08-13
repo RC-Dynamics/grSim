@@ -505,6 +505,7 @@ void SSLWorld::step(dReal dt)
 
     sendVisionBuffer();
     framenum ++;
+    received = false;
 }
 
 void SSLWorld::addRobotStatus(Robots_Status& robotsPacket, int robotID, int team, bool infrared, KickStatus kickStatus)
@@ -615,6 +616,7 @@ void SSLWorld::recvActions()
                     }
                     robots[id]->kicker->setRoller(rolling);
                 }
+                received = true;
             }
             if (packet.has_replacement())
             {
