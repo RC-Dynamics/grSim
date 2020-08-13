@@ -363,7 +363,22 @@ void GLWidget::step()
             ssl->step(ddt);
         }
         else {
-            ssl->step(cfg->DeltaTime());
+            if (cfg->SyncWithPython())
+            {
+                if (ssl->received || cont_stopped > 10)
+                {
+                    cont_stopped = 0;
+                    ssl->step(cfg->DeltaTime());
+                }
+                else
+                {
+                    cont_stopped++;
+                }
+            }
+            else
+            {
+                ssl->step(cfg->DeltaTime());
+            }
         }
     }
     frames ++;
