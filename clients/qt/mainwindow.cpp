@@ -138,9 +138,10 @@ void MainWindow::sendPacket()
     grSim_Packet packet;
     bool yellow = false;
     if (cmbTeam->currentText()=="Yellow") yellow = true;
-    packet.mutable_commands()->set_isteamyellow(yellow);
     packet.mutable_commands()->set_timestamp(0.0);
     grSim_Robot_Command* command = packet.mutable_commands()->add_robot_commands();
+    
+    command->set_isteamyellow(yellow);
     command->set_id(edtId->text().toInt());
 
     command->set_wheelsspeed(!chkVel->isChecked());
