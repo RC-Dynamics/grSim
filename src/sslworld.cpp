@@ -563,15 +563,15 @@ void SSLWorld::recvActions()
         if (size > 0)
         {
             packet.ParseFromArray(in_buffer, size);
-            int team=0;
             if (packet.has_commands())
             {
-                if (packet.commands().has_isteamyellow())
-                {
-                    if (packet.commands().isteamyellow()) team=1;
-                }
                 for (int i=0;i<packet.commands().robot_commands_size();i++)
                 {
+                    int team = 0;
+                    if (packet.commands().robot_commands(i).has_isteamyellow())
+                    {
+                        if (packet.commands().robot_commands(i).isteamyellow()) team = 1;
+                    }
                     if (!packet.commands().robot_commands(i).has_id()) continue;
                     int k = packet.commands().robot_commands(i).id();
                     int id = robotIndex(k, team);
