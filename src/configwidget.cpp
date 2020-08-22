@@ -96,7 +96,7 @@ ConfigWidget::ConfigWidget()
   world.push_back(phys_vars);
     VarListPtr worldp_vars(new VarList("World"));
     phys_vars->addChild(worldp_vars);  
-        ADD_VALUE(worldp_vars,Double,DesiredFPS,120,"Desired FPS")
+        ADD_VALUE(worldp_vars,Double,DesiredFPS,100,"Desired FPS")
         ADD_VALUE(worldp_vars,Bool,SyncWithGL,false,"Synchronize ODE with OpenGL")
         ADD_VALUE(worldp_vars, Bool, SyncWithPython, true, "Synchronize SimStep with python " )
         ADD_VALUE(worldp_vars,Double,DeltaTime,0.03,"ODE time step")
