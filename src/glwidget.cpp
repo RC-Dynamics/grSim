@@ -345,7 +345,6 @@ void GLWidget::initializeGL ()
 
 void GLWidget::step()
 {
-    logStatus(QString("GLWidget::step"), QColor("red"));
 
     const dReal* ballV = dBodyGetLinearVel(ssl->ball->body);
     double ballSpeed = ballV[0]*ballV[0] + ballV[1]*ballV[1] + ballV[2]*ballV[2];

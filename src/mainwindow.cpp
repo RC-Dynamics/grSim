@@ -173,7 +173,8 @@ MainWindow::MainWindow(QWidget *parent)
     timer->setInterval(getInterval());
 
 
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+    // QObject::connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+    QObject::connect(glwidget->ssl, SIGNAL(receivedPacket()), this, SLOT(update()));
     QObject::connect(takeSnapshotAct, SIGNAL(triggered(bool)), this, SLOT(takeSnapshot()));
     QObject::connect(takeSnapshotToClipboardAct, SIGNAL(triggered(bool)), this, SLOT(takeSnapshotToClipboard()));
     QObject::connect(exit, SIGNAL(triggered(bool)), this, SLOT(close()));
@@ -336,50 +337,48 @@ QString dRealToStr(dReal a)
 
 void MainWindow::update()
 {
-    if (glwidget->ssl->received){
-        if (glwidget->ssl->g->isGraphicsEnabled()) glwidget->updateGL();
-        else glwidget->step();
+    if (glwidget->ssl->g->isGraphicsEnabled()) glwidget->updateGL();
+    else glwidget->step();
 
-        int R = robotIndex(glwidget->Current_robot,glwidget->Current_team);
+    int R = robotIndex(glwidget->Current_robot,glwidget->Current_team);
 
-        if(0 <= R)
-        {
-            const dReal* vv = dBodyGetLinearVel(glwidget->ssl->robots[R]->chassis->body);
-            static dVector3 lvv;
-            dVector3 aa;
-            aa[0]=(vv[0]-lvv[0])/configwidget->DeltaTime();
-            aa[1]=(vv[1]-lvv[1])/configwidget->DeltaTime();
-            aa[2]=(vv[2]-lvv[2])/configwidget->DeltaTime();
-            robotwidget->vellabel->setText(QString::number(sqrt(vv[0]*vv[0]+vv[1]*vv[1]+vv[2]*vv[2]),'f',3));
-            robotwidget->acclabel->setText(QString::number(sqrt(aa[0]*aa[0]+aa[1]*aa[1]+aa[2]*aa[2]),'f',3));
-            lvv[0]=vv[0];
-            lvv[1]=vv[1];
-            lvv[2]=vv[2];
-        }
-
-        QString ss;
-        fpslabel->setText(QString("Frame rate: %1 fps").arg(ss.sprintf("%06.2f",glwidget->getFPS())));
-        if (glwidget->ssl->selected!=-1)
-        {
-            selectinglabel->setVisible(true);
-            if (glwidget->ssl->selected==-2)
-            {
-                selectinglabel->setText("Ball");
-            }
-            else
-            {
-                int R = glwidget->ssl->selected%configwidget->Robots_Count();
-                int T = glwidget->ssl->selected/configwidget->Robots_Count();
-                if (T==0) selectinglabel->setText(QString("%1:Blue").arg(R));
-                else selectinglabel->setText(QString("%1:Yellow").arg(R));
-            }
-        }
-        else selectinglabel->setVisible(false);
-        vanishlabel->setVisible(configwidget->vanishing());
-        noiselabel->setVisible(configwidget->noise());
-        cursorlabel->setText(QString("Cursor: [X=%1;Y=%2;Z=%3]").arg(dRealToStr(glwidget->ssl->cursor_x)).arg(dRealToStr(glwidget->ssl->cursor_y)).arg(dRealToStr(glwidget->ssl->cursor_z)));
-        statusWidget->update();
+    if(0 <= R)
+    {
+        const dReal* vv = dBodyGetLinearVel(glwidget->ssl->robots[R]->chassis->body);
+        static dVector3 lvv;
+        dVector3 aa;
+        aa[0]=(vv[0]-lvv[0])/configwidget->DeltaTime();
+        aa[1]=(vv[1]-lvv[1])/configwidget->DeltaTime();
+        aa[2]=(vv[2]-lvv[2])/configwidget->DeltaTime();
+        robotwidget->vellabel->setText(QString::number(sqrt(vv[0]*vv[0]+vv[1]*vv[1]+vv[2]*vv[2]),'f',3));
+        robotwidget->acclabel->setText(QString::number(sqrt(aa[0]*aa[0]+aa[1]*aa[1]+aa[2]*aa[2]),'f',3));
+        lvv[0]=vv[0];
+        lvv[1]=vv[1];
+        lvv[2]=vv[2];
     }
+
+    QString ss;
+    fpslabel->setText(QString("Frame rate: %1 fps").arg(ss.sprintf("%06.2f",glwidget->getFPS())));
+    if (glwidget->ssl->selected!=-1)
+    {
+        selectinglabel->setVisible(true);
+        if (glwidget->ssl->selected==-2)
+        {
+            selectinglabel->setText("Ball");
+        }
+        else
+        {
+            int R = glwidget->ssl->selected%configwidget->Robots_Count();
+            int T = glwidget->ssl->selected/configwidget->Robots_Count();
+            if (T==0) selectinglabel->setText(QString("%1:Blue").arg(R));
+            else selectinglabel->setText(QString("%1:Yellow").arg(R));
+        }
+    }
+    else selectinglabel->setVisible(false);
+    vanishlabel->setVisible(configwidget->vanishing());
+    noiselabel->setVisible(configwidget->noise());
+    cursorlabel->setText(QString("Cursor: [X=%1;Y=%2;Z=%3]").arg(dRealToStr(glwidget->ssl->cursor_x)).arg(dRealToStr(glwidget->ssl->cursor_y)).arg(dRealToStr(glwidget->ssl->cursor_z)));
+    statusWidget->update();
 }
 
 void MainWindow::updateRobotLabel()

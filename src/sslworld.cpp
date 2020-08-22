@@ -404,7 +404,6 @@ void SSLWorld::glinit()
 
 void SSLWorld::step(dReal dt)
 {
-    logStatus(QString("SSLWorld::step"), QColor("red"));
     if (!isGLEnabled) g->disableGraphics();
     else g->enableGraphics();
 
@@ -506,7 +505,6 @@ void SSLWorld::step(dReal dt)
 
     sendVisionBuffer();
     framenum ++;
-    received = false;
 }
 
 void SSLWorld::addRobotStatus(Robots_Status& robotsPacket, int robotID, int team, bool infrared, KickStatus kickStatus)
@@ -617,7 +615,6 @@ void SSLWorld::recvActions()
                     }
                     robots[id]->kicker->setRoller(rolling);
                 }
-                received = true;
             }
             if (packet.has_replacement())
             {
@@ -662,7 +659,6 @@ void SSLWorld::recvActions()
                     dBodySetLinearVel(ball->body,vx,vy,0);
                     dBodySetAngularVel(ball->body,0,0,0);
                 }
-                received = true;
             }
         }
 
@@ -688,6 +684,7 @@ void SSLWorld::recvActions()
                 sendRobotStatus(robotsPacket, sender, team);
         }
     }
+    emit receivedPacket();
 }
 
 dReal normalizeAngle(dReal a)
@@ -866,8 +863,6 @@ SendingPacket::SendingPacket(SSL_WrapperPacket* _packet,int _t)
 
 void SSLWorld::sendVisionBuffer()
 {
-    logStatus(QString("SSLWorld::sendVisionBuffer"), QColor("red"));
-
     int t = timer->elapsed();
     sendQueue.push_back(new SendingPacket(generatePacket(0),t));    
 

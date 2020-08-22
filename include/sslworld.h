@@ -111,6 +111,7 @@ public slots:
     void recvActions();
 signals:
     void fpsChanged(int newFPS);
+    void receivedPacket();
 };
 
 class RobotsFomation {
