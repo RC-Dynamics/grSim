@@ -23,6 +23,9 @@
 #include <QtNetwork>
 #include <iostream>
 
+#include "logger.h"
+
+
 using namespace std;
 
 RoboCupSSLClient::RoboCupSSLClient(const quint16 & port, const string & net_address, const string & net_interface) :
@@ -75,6 +78,8 @@ bool RoboCupSSLClient::open()
 
 bool RoboCupSSLClient::receive(SSL_WrapperPacket & packet)
 {
+    logStatus(QString("RoboCupSSLClient::receive"), QColor("red"));
+
     if(_socket->state() == QUdpSocket::BoundState && _socket->hasPendingDatagrams()) {
         QByteArray datagram;
         mutex.lock();

@@ -404,6 +404,7 @@ void SSLWorld::glinit()
 
 void SSLWorld::step(dReal dt)
 {
+    logStatus(QString("SSLWorld::step"), QColor("red"));
     if (!isGLEnabled) g->disableGraphics();
     else g->enableGraphics();
 
@@ -661,6 +662,7 @@ void SSLWorld::recvActions()
                     dBodySetLinearVel(ball->body,vx,vy,0);
                     dBodySetAngularVel(ball->body,0,0,0);
                 }
+                received = true;
             }
         }
 
@@ -864,6 +866,8 @@ SendingPacket::SendingPacket(SSL_WrapperPacket* _packet,int _t)
 
 void SSLWorld::sendVisionBuffer()
 {
+    logStatus(QString("SSLWorld::sendVisionBuffer"), QColor("red"));
+
     int t = timer->elapsed();
     sendQueue.push_back(new SendingPacket(generatePacket(0),t));    
 

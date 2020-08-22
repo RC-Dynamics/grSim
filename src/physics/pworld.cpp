@@ -167,6 +167,7 @@ PSurface* PWorld::findSurface(PObject* o1,PObject* o2)
 void PWorld::step(dReal dt, bool fullspeed)
 {
     try {
+        // logStatus(QString("PWorld::step"), QColor("red"));
         dSpaceCollide (space,this,&nearCallback);
         dWorldSetQuickStepNumIterations(world, 20);
         if (fullspeed)
