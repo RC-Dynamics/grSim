@@ -745,15 +745,13 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
     if (cfg->noise()==false) {dev_x = 0;dev_y = 0;dev_a = 0;}
     if ((cfg->vanishing()==false) || (rand0_1() > cfg->ball_vanishing()))
     {
-        if (visibleInCam(cam_id, x, y)) {
-            SSL_DetectionBall* vball = packet->mutable_detection()->add_balls();
-            vball->set_x(randn_notrig(x*1000.0f,dev_x));
-            vball->set_y(randn_notrig(y*1000.0f,dev_y));
-            vball->set_z(z*1000.0f);
-            vball->set_pixel_x(x*1000.0f);
-            vball->set_pixel_y(y*1000.0f);
-            vball->set_confidence(0.9 + rand0_1()*0.1);
-        }
+        SSL_DetectionBall* vball = packet->mutable_detection()->add_balls();
+        vball->set_x(randn_notrig(x*1000.0f,dev_x));
+        vball->set_y(randn_notrig(y*1000.0f,dev_y));
+        vball->set_z(z*1000.0f);
+        vball->set_pixel_x(x*1000.0f);
+        vball->set_pixel_y(y*1000.0f);
+        vball->set_confidence(0.9 + rand0_1()*0.1);
     }
     for(int i = 0; i < cfg->Robots_Count(); i++){
         if ((cfg->vanishing()==false) || (rand0_1() > cfg->blue_team_vanishing()))
@@ -767,16 +765,14 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
                     robots[i]->resetRobot();
                 }
             }
-            if (visibleInCam(cam_id, x, y)) {
-                SSL_DetectionRobot* rob = packet->mutable_detection()->add_robots_blue();
-                rob->set_robot_id(i);
-                rob->set_pixel_x(x*1000.0f);
-                rob->set_pixel_y(y*1000.0f);
-                rob->set_confidence(1);
-                rob->set_x(randn_notrig(x*1000.0f,dev_x));
-                rob->set_y(randn_notrig(y*1000.0f,dev_y));
-                rob->set_orientation(normalizeAngle(randn_notrig(dir,dev_a))*M_PI/180.0f);
-            }
+            SSL_DetectionRobot* rob = packet->mutable_detection()->add_robots_blue();
+            rob->set_robot_id(i);
+            rob->set_pixel_x(x*1000.0f);
+            rob->set_pixel_y(y*1000.0f);
+            rob->set_confidence(1);
+            rob->set_x(randn_notrig(x*1000.0f,dev_x));
+            rob->set_y(randn_notrig(y*1000.0f,dev_y));
+            rob->set_orientation(normalizeAngle(randn_notrig(dir,dev_a))*M_PI/180.0f);
         }
     }
     for(int i = cfg->Robots_Count(); i < cfg->Robots_Count()*2; i++){
@@ -791,16 +787,15 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
                     robots[i]->resetRobot();
                 }
             }
-            if (visibleInCam(cam_id, x, y)) {
-                SSL_DetectionRobot* rob = packet->mutable_detection()->add_robots_yellow();
-                rob->set_robot_id(i-cfg->Robots_Count());
-                rob->set_pixel_x(x*1000.0f);
-                rob->set_pixel_y(y*1000.0f);
-                rob->set_confidence(1);
-                rob->set_x(randn_notrig(x*1000.0f,dev_x));
-                rob->set_y(randn_notrig(y*1000.0f,dev_y));
-                rob->set_orientation(normalizeAngle(randn_notrig(dir,dev_a))*M_PI/180.0f);
-            }
+
+            SSL_DetectionRobot* rob = packet->mutable_detection()->add_robots_yellow();
+            rob->set_robot_id(i-cfg->Robots_Count());
+            rob->set_pixel_x(x*1000.0f);
+            rob->set_pixel_y(y*1000.0f);
+            rob->set_confidence(1);
+            rob->set_x(randn_notrig(x*1000.0f,dev_x));
+            rob->set_y(randn_notrig(y*1000.0f,dev_y));
+            rob->set_orientation(normalizeAngle(randn_notrig(dir,dev_a))*M_PI/180.0f);
         }
     }
     return packet;
@@ -889,17 +884,14 @@ void SSLWorld::sendVisionBuffer()
 {
     int t = timer->elapsed();
     sendQueue.push_back(new SendingPacket(generatePacket(0),t));    
-    sendQueue.push_back(new SendingPacket(generatePacket(1),t+1));
-    sendQueue.push_back(new SendingPacket(generatePacket(2),t+2));
-    sendQueue.push_back(new SendingPacket(generatePacket(3),t+3));
-    while (t - sendQueue.front()->t>=cfg->sendDelay())
+
+    if (t - sendQueue.front()->t>=cfg->sendDelay())
     {
         SSL_WrapperPacket *packet = sendQueue.front()->packet;
         delete sendQueue.front();
         sendQueue.pop_front();
         visionServer->send(*packet);
         delete packet;
-        if (sendQueue.isEmpty()) break;
     }
 }
 
